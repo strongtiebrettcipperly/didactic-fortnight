@@ -38,3 +38,11 @@ form button { margin-top: 14px; justify-self: start; }
 .empty-card p { color: #5e5e5e; margin: 0 0 24px; }
 :focus-visible { outline: 2px solid #206eec; outline-offset: 3px; }
 @media (max-width: 760px) { .workspace { grid-template-columns: 1fr; } .sidebar { border-right: 0; border-bottom: 1px solid #e3e3e3; padding: 16px; } .sidebar nav { display: flex; overflow-x: auto; } .nav-item { white-space: nowrap; width: auto; } .sidebar-hint { display: none; } .content { padding: 34px 20px; } .card-grid { grid-template-columns: 1fr; } .topbar { padding: 0 16px; } }
+.search-field { display: grid; gap: 8px; max-width: 480px; margin-bottom: 28px; }
+.result-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.result-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.spec-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 0 0 28px; }
+.spec-list dt { color: #6a6a6a; font-size: 13px; margin-bottom: 4px; }
+.spec-list dd { margin: 0; font-weight: 700; }
+.button-row { display: flex; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 760px) { .result-list { grid-template-columns: 1fr; } }

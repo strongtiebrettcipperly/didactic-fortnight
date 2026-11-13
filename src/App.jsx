@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Badge } from '@strongtie/design-system/badge'
 import { Button } from '@strongtie/design-system/button'
 import {
   Card,
@@ -7,16 +8,50 @@ import {
   CardHeader,
   CardTitle,
 } from '@strongtie/design-system/card'
+import { Input } from '@strongtie/design-system/input'
+import { Label } from '@strongtie/design-system/label'
+
+// Sample data only — not real product specifications.
+const connectors = [
+  { id: 'lus26', model: 'LUS26', type: 'Joist hanger', load: '1,165 lb', finish: 'G90' },
+  { id: 'h1', model: 'H1', type: 'Hurricane tie', load: '585 lb', finish: 'G90' },
+  { id: 'a34', model: 'A34', type: 'Framing angle', load: '440 lb', finish: 'G90' },
+  { id: 'abu44', model: 'ABU44', type: 'Post base', load: '2,200 lb', finish: 'HDG' },
+]
 
 const screens = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'form', label: 'Form state' },
-  { id: 'empty', label: 'Empty state' },
+  { id: 'search', label: 'Find a connector' },
+  { id: 'detail', label: 'Connector detail' },
+  { id: 'empty', label: 'No results' },
 ]
 
 export default function App() {
-  const [screen, setScreen] = useState('overview')
-  const [submitted, setSubmitted] = useState(false)
+  const [screen, setScreen] = useState('search')
+  const [query, setQuery] = useState('')
+  const [selected, setSelected] = useState(connectors[0])
+  const [added, setAdded] = useState(false)
+
+  const results = connectors.filter(({ model, type }) =>
+    `${model} ${type}`.toLowerCase().includes(query.trim().toLowerCase()),
+  )
+
+  const openDetail = (connector) => {
+    setSelected(connector)
+    setAdded(false)
+    setScreen('detail')
+  }
+
+  const showScreen = (id) => {
+    if (id === 'empty') {
+      setQuery('zzz')
+      setScreen('search')
+      return
+    }
+    if (id === 'search' && results.length === 0) setQuery('')
+    setScreen(id)
+  }
+
+  const current = screen === 'search' && results.length === 0 ? 'empty' : screen
 
   return (
     <div className="app-shell">
@@ -24,9 +59,9 @@ export default function App() {
         <span className="brand-mark" aria-hidden="true">S</span>
         <div>
           <p className="eyebrow">Simpson Strong-Tie</p>
-          <strong>UX mockup starter</strong>
+          <strong>Connector finder</strong>
         </div>
-        <span className="prototype-badge">Prototype</span>
+        <span className="prototype-badge">Prototype · sample data</span>
       </header>
 
       <div className="workspace">
@@ -35,86 +70,107 @@ export default function App() {
           <nav>
             {screens.map(({ id, label }) => (
               <button
-                className={screen === id ? 'nav-item active' : 'nav-item'}
+                className={current === id ? 'nav-item active' : 'nav-item'}
                 key={id}
-                onClick={() => setScreen(id)}
+                onClick={() => showScreen(id)}
                 type="button"
-                aria-current={screen === id ? 'page' : undefined}
+                aria-current={current === id ? 'page' : undefined}
               >
                 {label}
               </button>
             ))}
           </nav>
-          <p className="sidebar-hint">Replace these sample screens with your flow. Keep the navigation if reviewers need to compare states.</p>
+          <p className="sidebar-hint">A simple test mockup. Search, open a connector, and add it to a project.</p>
         </aside>
 
         <main className="content">
-          <div className="page-heading">
-            <p className="eyebrow">Example flow</p>
-            <h1>{screens.find(({ id }) => id === screen)?.label}</h1>
-            <p>This starter demonstrates screen navigation and a few states. Make the mockup your own.</p>
-          </div>
+          {(current === 'search' || current === 'empty') && (
+            <>
+              <div className="page-heading">
+                <p className="eyebrow">Step 1</p>
+                <h1>Find a connector</h1>
+                <p>Search by model number or connector type.</p>
+              </div>
 
-          {screen === 'overview' && (
-            <div className="card-grid">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Start with a real scenario</CardTitle>
-                  <CardDescription>Show the task and the decision your user needs to make.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>Use realistic copy and sample data. The design system components give the prototype a familiar foundation.</p>
-                  <Button onClick={() => setScreen('form')}>Explore the flow</Button>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle>Show the states</CardTitle>
-                  <CardDescription>Reviewers need to see more than the happy path.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p>Include loading, error, empty, disabled, and success states when they matter to the concept.</p>
-                  <Button variant="outline" onClick={() => setScreen('empty')}>View empty state</Button>
-                </CardContent>
-              </Card>
-            </div>
+              <div className="search-field">
+                <Label htmlFor="connector-search">Search connectors</Label>
+                <Input
+                  id="connector-search"
+                  type="search"
+                  placeholder="Example: hanger, H1"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                />
+              </div>
+
+              {current === 'empty' ? (
+                <Card className="feature-card empty-card">
+                  <CardContent>
+                    <div className="empty-icon" aria-hidden="true">◇</div>
+                    <h2>No connectors match “{query}”</h2>
+                    <p>Check the model number or try a broader term like “hanger”.</p>
+                    <Button variant="outline" onClick={() => setQuery('')}>Clear search</Button>
+                  </CardContent>
+                </Card>
+              ) : (
+                <ul className="result-list" aria-label={`${results.length} connectors`}>
+                  {results.map((connector) => (
+                    <li key={connector.id}>
+                      <Card>
+                        <CardHeader>
+                          <CardTitle>{connector.model}</CardTitle>
+                          <CardDescription>{connector.type}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="result-footer">
+                          <Badge variant="secondary">{connector.finish}</Badge>
+                          <Button variant="outline" onClick={() => openDetail(connector)}>
+                            View {connector.model}
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </>
           )}
 
-          {screen === 'form' && (
-            <Card className="feature-card">
-              <CardHeader>
-                <CardTitle>Request a concept review</CardTitle>
-                <CardDescription>This interaction is sample behavior for a clickable mockup.</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {submitted ? (
-                  <div className="success-panel" role="status">
-                    <strong>Request ready for review</strong>
-                    <p>This is a simulated success state. No data was sent.</p>
-                    <Button variant="outline" onClick={() => setSubmitted(false)}>Start again</Button>
-                  </div>
-                ) : (
-                  <form onSubmit={(event) => { event.preventDefault(); setSubmitted(true) }}>
-                    <label htmlFor="concept-name">Concept name</label>
-                    <input id="concept-name" name="concept-name" placeholder="Example: Project dashboard" required />
-                    <label htmlFor="review-note">What should reviewers focus on?</label>
-                    <textarea id="review-note" name="review-note" placeholder="Describe the decision or question" rows="4" required />
-                    <Button type="submit">Submit request</Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-          )}
+          {current === 'detail' && (
+            <>
+              <div className="page-heading">
+                <p className="eyebrow">Step 2</p>
+                <h1>{selected.model}</h1>
+                <p>{selected.type}</p>
+              </div>
 
-          {screen === 'empty' && (
-            <Card className="feature-card empty-card">
-              <CardContent>
-                <div className="empty-icon" aria-hidden="true">◇</div>
-                <h2>No concepts yet</h2>
-                <p>Give people a useful next step when there is nothing to show.</p>
-                <Button onClick={() => setScreen('form')}>Create a concept</Button>
-              </CardContent>
-            </Card>
+              <Card className="feature-card">
+                <CardHeader>
+                  <CardTitle>Specifications</CardTitle>
+                  <CardDescription>Sample values for this mockup only.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <dl className="spec-list">
+                    <div><dt>Model</dt><dd>{selected.model}</dd></div>
+                    <div><dt>Type</dt><dd>{selected.type}</dd></div>
+                    <div><dt>Allowable load</dt><dd>{selected.load}</dd></div>
+                    <div><dt>Finish</dt><dd>{selected.finish}</dd></div>
+                  </dl>
+
+                  {added ? (
+                    <div className="success-panel" role="status">
+                      <strong>{selected.model} added to Project Alpha</strong>
+                      <p>This is a simulated success state. No data was sent.</p>
+                      <Button variant="outline" onClick={() => setScreen('search')}>Find another connector</Button>
+                    </div>
+                  ) : (
+                    <div className="button-row">
+                      <Button onClick={() => setAdded(true)}>Add to project</Button>
+                      <Button variant="ghost" onClick={() => setScreen('search')}>Back to results</Button>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </>
           )}
         </main>
       </div>
