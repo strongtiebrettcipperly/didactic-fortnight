@@ -1,3 +1,11 @@
+# Connector finder (test mockup)
+
+> **This copy uses the public StrongTie registry, not the Azure package feed.**
+> Components in `src/components/ui/` were copied from https://design.strongtie.io/r/{name}.json,
+> styled with Tailwind, and themed with the public CDN tokens (`index.html` + `src/theme.css`).
+> No Azure Artifacts sign-in or `AZURE_ARTIFACTS_PAT` secret is needed; the Pages and package-feed
+> steps below that mention Azure don't apply to this repo.
+
 # StrongTie UX mockup template
 
 A small Vite + React starter for clickable UX mockups. It includes the [StrongTie design system](https://design.strongtie.io/), sample screens and states, instructions for coding agents, and a GitHub Pages workflow.

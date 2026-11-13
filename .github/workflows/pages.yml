@@ -20,10 +20,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Configure StrongTie package feed
-        env:
-          AZURE_ARTIFACTS_PAT: ${{ secrets.AZURE_ARTIFACTS_PAT }}
-        run: node scripts/configure-npm-auth.mjs
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Build mockup

@@ -1,6 +1,6 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import '@strongtie/design-system/styles'
+import './theme.css'
 import './styles.css'
 import App from './App.jsx'
 

@@ -1,0 +1,30 @@
+/*
+ * Tailwind + StrongTie theme for the public registry components.
+ * Tokens and fonts load from the public StrongTie CDN in index.html;
+ * this maps the shadcn-style names the components use to those tokens.
+ */
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "HelveticaNowRoman", "Helvetica", "Arial", sans-serif;
+  --color-background: var(--surface-primary-background);
+  --color-foreground: var(--surface-primary-foreground);
+  --color-card: var(--surface-primary-background);
+  --color-card-foreground: var(--surface-primary-foreground);
+  --color-primary: var(--action-default-background);
+  --color-primary-foreground: var(--action-default-foreground);
+  --color-secondary: var(--action-secondary-background);
+  --color-secondary-foreground: var(--action-secondary-foreground);
+  --color-accent: var(--action-ghost-hover-background);
+  --color-accent-foreground: var(--surface-primary-foreground);
+  --color-muted: var(--surface-primary-muted-background);
+  --color-muted-foreground: var(--surface-primary-muted-foreground);
+  --color-destructive: var(--action-destructive-background);
+  --color-border: var(--surface-primary-border);
+  --color-input: var(--control-border);
+  --color-ring: var(--focus-color);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+}

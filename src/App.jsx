@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import { Badge } from '@strongtie/design-system/badge'
-import { Button } from '@strongtie/design-system/button'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@strongtie/design-system/card'
-import { Input } from '@strongtie/design-system/input'
-import { Label } from '@strongtie/design-system/label'
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 // Sample data only — not real product specifications.
 const connectors = [
